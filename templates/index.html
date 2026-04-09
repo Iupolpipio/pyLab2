@@ -170,21 +170,24 @@
                 <label for="principal">Начальная сумма (руб.):</label>
                 <input type="text" id="principal" name="principal" 
                        placeholder="Например: 100.000" 
-                       value="{{ request.form.get('principal', '') }}" inputmode="numeric" required>
+                       value="{{ request.form.get('principal', '') }}" inputmode="numeric" 
+                       maxlength="18" required>
             </div>
 
             <div class="form-group">
                 <label for="rate">Годовая процентная ставка (%):</label>
                 <input type="text" id="rate" name="rate" 
                        placeholder="Например: 10" 
-                       value="{{ request.form.get('rate', '') }}" inputmode="numeric" required>
+                       value="{{ request.form.get('rate', '') }}" inputmode="numeric" 
+                       maxlength="6" required>
             </div>
 
             <div class="form-group">
                 <label for="time">Срок вклада (лет):</label>
                 <input type="text" id="time" name="time" 
                        placeholder="Например: 5" 
-                       value="{{ request.form.get('time', '') }}" inputmode="numeric" required>
+                       value="{{ request.form.get('time', '') }}" inputmode="numeric" 
+                       maxlength="4" required>
             </div>
 
             <div class="form-group">

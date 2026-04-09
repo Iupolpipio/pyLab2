@@ -21,24 +21,38 @@ def calculate_compound_interest(principal, rate, time, frequency):
         return None, "Процентная ставка не может быть отрицательной"
     if time <= 0:
         return None, "Время должно быть больше нуля"
+    if time > 100:
+        return None, "Максимальный срок вклада — 100 лет"
     if frequency <= 0:
         return None, "Частота начисления должна быть больше нуля"
+    if principal > 1e15:
+        return None, "Начальная сумма слишком большая"
+    if rate > 100:
+        return None, "Процентная ставка не может быть больше 100%"
 
     r = rate / 100
     n = frequency
     t = time
 
-    amount = principal * math.pow((1 + r / n), n * t)
-    interest = amount - principal
+    try:
+        amount = principal * math.pow((1 + r / n), n * t)
+        
+        # Проверка на переполнение
+        if math.isinf(amount):
+            return None, "Результат слишком большой. Проверьте введённые данные"
+        
+        interest = amount - principal
 
-    return {
-        'initial_amount': f"{principal:,.2f}".replace(",", "|").replace(".", ",").replace("|", "."),
-        'final_amount': f"{amount:,.2f}".replace(",", "|").replace(".", ",").replace("|", "."),
-        'interest_earned': f"{interest:,.2f}".replace(",", "|").replace(".", ",").replace("|", "."),
-        'rate': rate,
-        'time': time,
-        'frequency': frequency
-    }, None
+        return {
+            'initial_amount': f"{principal:,.2f}".replace(",", "|").replace(".", ",").replace("|", "."),
+            'final_amount': f"{amount:,.2f}".replace(",", "|").replace(".", ",").replace("|", "."),
+            'interest_earned': f"{interest:,.2f}".replace(",", "|").replace(".", ",").replace("|", "."),
+            'rate': rate,
+            'time': time,
+            'frequency': frequency
+        }, None
+    except OverflowError:
+        return None, "Результат слишком большой. Проверьте введённые данные"
 
 
 @app.route('/')
