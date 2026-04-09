@@ -165,26 +165,26 @@
         <div class="error">{{ error }}</div>
         {% endif %}
 
-        <form action="/calculate" method="post">
+        <form action="/calculate" method="post" id="calcForm">
             <div class="form-group">
                 <label for="principal">Начальная сумма (руб.):</label>
-                <input type="number" id="principal" name="principal" 
-                       step="0.01" min="0" placeholder="Например: 100000" 
-                       value="{{ request.form.get('principal', '') }}" required>
+                <input type="text" id="principal" name="principal" 
+                       placeholder="Например: 100.000" 
+                       value="{{ request.form.get('principal', '') }}" inputmode="numeric" required>
             </div>
 
             <div class="form-group">
                 <label for="rate">Годовая процентная ставка (%):</label>
-                <input type="number" id="rate" name="rate" 
-                       step="0.01" min="0" placeholder="Например: 10" 
-                       value="{{ request.form.get('rate', '') }}" required>
+                <input type="text" id="rate" name="rate" 
+                       placeholder="Например: 10" 
+                       value="{{ request.form.get('rate', '') }}" inputmode="numeric" required>
             </div>
 
             <div class="form-group">
                 <label for="time">Срок вклада (лет):</label>
-                <input type="number" id="time" name="time" 
-                       step="0.5" min="0.5" placeholder="Например: 5" 
-                       value="{{ request.form.get('time', '') }}" required>
+                <input type="text" id="time" name="time" 
+                       placeholder="Например: 5" 
+                       value="{{ request.form.get('time', '') }}" inputmode="numeric" required>
             </div>
 
             <div class="form-group">
@@ -245,5 +245,97 @@
                n — частота начисления процентов в год, t — время в годах.</p>
         </div>
     </div>
+
+    <script>
+        // Функция для форматирования чисел с разделителями тысяч (точки)
+        function formatInput(input) {
+            // Получаем позицию курсора
+            let cursorPos = input.selectionStart;
+            let oldLength = input.value.length;
+            
+            // Получаем только цифры
+            let rawValue = input.value.replace(/[^\d]/g, '');
+            
+            if (rawValue === '') {
+                input.value = '';
+                return;
+            }
+            
+            // Форматируем с точками
+            let formatted = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            input.value = formatted;
+            
+            // Корректируем позицию курсора
+            let newLength = formatted.length;
+            let diff = newLength - oldLength;
+            let newPos = cursorPos + diff;
+            
+            if (newPos < 0) newPos = 0;
+            if (newPos > newLength) newPos = newLength;
+            
+            input.setSelectionRange(newPos, newPos);
+        }
+
+        // Функция для получения числа без форматирования
+        function getRawValue(input) {
+            return input.value.replace(/\./g, '');
+        }
+
+        // Форматируем поля при загрузке страницы (если есть значения)
+        function formatFieldsOnLoad() {
+            const fields = ['principal', 'rate', 'time'];
+            fields.forEach(function(fieldName) {
+                let input = document.getElementById(fieldName);
+                if (input.value) {
+                    let rawValue = input.value.replace(/[^\d]/g, '');
+                    if (rawValue) {
+                        input.value = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                    }
+                }
+            });
+        }
+
+        // Навешиваем обработчики на каждое поле
+        const fields = ['principal', 'rate', 'time'];
+        
+        fields.forEach(function(fieldName) {
+            let input = document.getElementById(fieldName);
+            
+            // При вводе - форматируем
+            input.addEventListener('input', function(e) {
+                formatInput(e.target);
+            });
+            
+            // Запрещаем ввод не-цифровых символов
+            input.addEventListener('keypress', function(e) {
+                // Разрешаем только цифры
+                if (!/\d/.test(e.key)) {
+                    e.preventDefault();
+                }
+            });
+            
+            // Запрещаем вставку текста
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+                let paste = (e.clipboardData || window.clipboardData).getData('text');
+                let digits = paste.replace(/[^\d]/g, '');
+                if (digits) {
+                    e.target.value = digits;
+                    formatInput(e.target);
+                }
+            });
+        });
+
+        // Перед отправкой формы убираем форматирование
+        document.getElementById('calcForm').addEventListener('submit', function(e) {
+            fields.forEach(function(fieldName) {
+                let input = document.getElementById(fieldName);
+                input.value = getRawValue(input);
+            });
+        });
+
+        // Форматируем поля при загрузке
+        formatFieldsOnLoad();
+    </script>
 </body>
 </html>
