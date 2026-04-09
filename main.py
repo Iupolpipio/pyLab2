@@ -32,9 +32,9 @@ def calculate_compound_interest(principal, rate, time, frequency):
     interest = amount - principal
 
     return {
-        'initial_amount': principal,
-        'final_amount': round(amount, 2),
-        'interest_earned': round(interest, 2),
+        'initial_amount': f"{principal:,.2f}".replace(",", "|").replace(".", ",").replace("|", "."),
+        'final_amount': f"{amount:,.2f}".replace(",", "|").replace(".", ",").replace("|", "."),
+        'interest_earned': f"{interest:,.2f}".replace(",", "|").replace(".", ",").replace("|", "."),
         'rate': rate,
         'time': time,
         'frequency': frequency
