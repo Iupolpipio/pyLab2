@@ -19,7 +19,6 @@
             line-height: 1.5;
         }
 
-        /* Шапка */
         .header {
             background: linear-gradient(90deg, #005BFF 0%, #0033CC 100%);
             padding: 20px 0;
@@ -47,7 +46,6 @@
             margin-top: 4px;
         }
 
-        /* Основной контент */
         .main-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -64,7 +62,6 @@
             }
         }
 
-        /* Карточки */
         .card {
             background: white;
             border-radius: 12px;
@@ -79,29 +76,34 @@
             color: #1A1A1A;
         }
 
-        /* Ползунок + ввод */
-        .slider-group {
+        /* Параметр: поле ввода + ползунок в одной строке */
+        .param-group {
             margin-bottom: 28px;
         }
 
-        .slider-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .slider-label {
+        .param-label {
             font-size: 14px;
             color: #667788;
             font-weight: 500;
+            margin-bottom: 10px;
         }
 
-        .slider-value-input {
-            width: 140px;
-            padding: 6px 12px;
+        .param-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .param-input-wrap {
+            flex: 0 0 140px;
+            position: relative;
+        }
+
+        .param-input {
+            width: 100%;
+            padding: 10px 14px;
             border: 1px solid #DDE2E8;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             color: #1A1A1A;
@@ -110,11 +112,18 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .slider-value-input:focus {
+        .param-input:focus {
             outline: none;
             border-color: #005BFF;
             box-shadow: 0 0 0 3px rgba(0, 91, 255, 0.1);
             background: white;
+        }
+
+        .param-slider-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
         .slider-container {
@@ -171,36 +180,130 @@
             justify-content: space-between;
             font-size: 12px;
             color: #99AABB;
-            margin-top: 8px;
         }
 
-        /* Обычное поле */
-        select {
+        .param-unit {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #99AABB;
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        .param-input-wrap .param-input {
+            padding-right: 36px;
+        }
+
+        .param-input-wrap .param-input[readonly] {
+            background: #EEF0F2;
+            cursor: default;
+        }
+
+        /* Кастомный dropdown */
+        .custom-select {
+            position: relative;
             width: 100%;
-            padding: 12px 16px;
+        }
+
+        .custom-select-trigger {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
             border: 1px solid #DDE2E8;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 500;
             color: #1A1A1A;
             background: #F8F9FA;
-            transition: border-color 0.2s, box-shadow 0.2s;
             cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23667788' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 40px;
+            position: relative;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            user-select: none;
         }
 
-        select:focus {
-            outline: none;
+        .custom-select-trigger::after {
+            content: '';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #99AABB;
+            transition: transform 0.2s;
+        }
+
+        .custom-select.open .custom-select-trigger::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .custom-select-trigger:hover {
+            border-color: #BBC3CC;
+        }
+
+        .custom-select.open .custom-select-trigger {
             border-color: #005BFF;
             box-shadow: 0 0 0 3px rgba(0, 91, 255, 0.1);
             background: white;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
         }
 
-        /* Ошибка */
+        .custom-select-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #005BFF;
+            border-top: none;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            display: none;
+            overflow: hidden;
+        }
+
+        .custom-select.open .custom-select-dropdown {
+            display: block;
+        }
+
+        .custom-option {
+            padding: 10px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1A1A1A;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .custom-option:hover {
+            background: #F0F5FF;
+            color: #005BFF;
+        }
+
+        .custom-option.selected {
+            background: #005BFF;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #667788;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
         .error {
             background: #FFF2F2;
             border: 1px solid #FFCCCC;
@@ -211,7 +314,6 @@
             font-size: 14px;
         }
 
-        /* Результат */
         .result-card {
             position: sticky;
             top: 100px;
@@ -223,12 +325,6 @@
             padding: 24px;
             color: white;
             margin-bottom: 20px;
-            transition: opacity 0.3s, transform 0.3s;
-        }
-
-        .result-main.loading {
-            opacity: 0.6;
-            transform: scale(0.98);
         }
 
         .result-main-label {
@@ -271,7 +367,6 @@
             color: #00A651;
         }
 
-        /* Инфо блок */
         .info-block {
             background: #F0F5FF;
             border-left: 3px solid #005BFF;
@@ -304,7 +399,6 @@
             font-weight: 600;
         }
 
-        /* Подвал */
         .footer {
             background: white;
             padding: 20px 0;
@@ -321,29 +415,12 @@
             font-size: 13px;
         }
 
-        /* Заглушка результата */
-        .result-placeholder {
-            text-align: center;
-            padding: 60px 20px;
-            color: #99AABB;
-            transition: display 0.3s;
-        }
-
-        .result-placeholder svg {
-            margin-bottom: 16px;
-        }
-
-        .result-placeholder p {
-            font-size: 15px;
-        }
-
         .hidden {
             display: none !important;
         }
     </style>
 </head>
 <body>
-    <!-- Шапка -->
     <div class="header">
         <div class="header-content">
             <h1>Калькулятор сложного процента</h1>
@@ -351,71 +428,83 @@
         </div>
     </div>
 
-    <!-- Основной контент -->
     <div class="main-content">
-        <!-- Левая колонка - форма -->
         <div class="card">
             <h2 class="card-title">Параметры вклада</h2>
 
             <div id="errorContainer"></div>
 
-            <div class="slider-group">
-                <div class="slider-header">
-                    <span class="slider-label">Начальная сумма</span>
-                    <input type="text" class="slider-value-input" id="principalInput" 
-                           value="100.000" inputmode="numeric">
-                </div>
-                <div class="slider-container">
-                    <input type="range" id="principal" name="principal" 
-                           min="1000" max="10000000" step="1000" value="100000">
-                    <div class="slider-range">
-                        <span>1.000 ₽</span>
-                        <span>10.000.000 ₽</span>
+            <!-- Начальная сумма -->
+            <div class="param-group">
+                <div class="param-label">Начальная сумма</div>
+                <div class="param-row">
+                    <div class="param-input-wrap">
+                        <input type="text" class="param-input" id="principalInput" value="100 000">
+                        <span class="param-unit">₽</span>
+                    </div>
+                    <div class="param-slider-wrap">
+                        <div class="slider-container">
+                            <input type="range" id="principal" min="1000" max="10000000" step="1000" value="100000">
+                        </div>
+                        <div class="slider-range">
+                            <span>1 000</span>
+                            <span>10 000 000</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="slider-group">
-                <div class="slider-header">
-                    <span class="slider-label">Годовая ставка</span>
-                    <input type="text" class="slider-value-input" id="rateInput" 
-                           value="10" inputmode="numeric">
-                </div>
-                <div class="slider-container">
-                    <input type="range" id="rate" name="rate" 
-                           min="1" max="100" step="0.5" value="10">
-                    <div class="slider-range">
-                        <span>1%</span>
-                        <span>100%</span>
+            <!-- Годовая ставка -->
+            <div class="param-group">
+                <div class="param-label">Годовая ставка</div>
+                <div class="param-row">
+                    <div class="param-input-wrap">
+                        <input type="text" class="param-input" id="rateInput" value="10">
+                        <span class="param-unit">%</span>
+                    </div>
+                    <div class="param-slider-wrap">
+                        <div class="slider-container">
+                            <input type="range" id="rate" min="1" max="100" step="0.5" value="10">
+                        </div>
+                        <div class="slider-range">
+                            <span>1</span>
+                            <span>100</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="slider-group">
-                <div class="slider-header">
-                    <span class="slider-label">Срок вклада</span>
-                    <input type="text" class="slider-value-input" id="timeInput" 
-                           value="5" inputmode="numeric">
-                </div>
-                <div class="slider-container">
-                    <input type="range" id="time" name="time" 
-                           min="1" max="100" step="1" value="5">
-                    <div class="slider-range">
-                        <span>1 год</span>
-                        <span>100 лет</span>
+            <!-- Срок вклада -->
+            <div class="param-group">
+                <div class="param-label">Срок вклада</div>
+                <div class="param-row">
+                    <div class="param-input-wrap">
+                        <input type="text" class="param-input" id="timeInput" value="5">
+                        <span class="param-unit" id="timeUnit">лет</span>
+                    </div>
+                    <div class="param-slider-wrap">
+                        <div class="slider-container">
+                            <input type="range" id="time" min="1" max="100" step="1" value="5">
+                        </div>
+                        <div class="slider-range">
+                            <span>1</span>
+                            <span>100</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Частота начисления -->
             <div class="form-group">
-                <label for="frequency">Частота начисления процентов</label>
-                <select id="frequency" name="frequency">
-                    <option value="1">1 раз в год</option>
-                    <option value="2">2 раза в год</option>
-                    <option value="4">Ежеквартально</option>
-                    <option value="12" selected>Ежемесячно</option>
-                    <option value="365">Ежедневно</option>
-                </select>
+                <label>Частота начисления процентов</label>
+                <div class="custom-select" id="frequencySelect">
+                    <div class="custom-select-trigger">Ежемесячно</div>
+                    <div class="custom-select-dropdown">
+                        <div class="custom-option" data-value="1">Ежегодно</div>
+                        <div class="custom-option" data-value="12">Ежемесячно</div>
+                        <div class="custom-option" data-value="365">Ежедневно</div>
+                    </div>
+                </div>
             </div>
 
             <div class="info-block">
@@ -425,21 +514,12 @@
             </div>
         </div>
 
-        <!-- Правая колонка - результат (sticky) -->
+        <!-- Результат -->
         <div class="card result-card">
             <h2 class="card-title">Результат</h2>
 
-            <div id="resultPlaceholder" class="result-placeholder">
-                <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="32" cy="32" r="30" stroke="#DDE2E8" stroke-width="2"/>
-                    <path d="M32 20V36" stroke="#BBC3CC" stroke-width="2" stroke-linecap="round"/>
-                    <circle cx="32" cy="42" r="2" fill="#BBC3CC"/>
-                </svg>
-                <p>Настройте параметры для расчёта</p>
-            </div>
-
             <div id="resultContainer" class="hidden">
-                <div class="result-main" id="resultMain">
+                <div class="result-main">
                     <div class="result-main-label">Итоговая сумма</div>
                     <div class="result-main-value" id="resultFinalAmount">—</div>
                 </div>
@@ -470,7 +550,6 @@
         </div>
     </div>
 
-    <!-- Подвал -->
     <div class="footer">
         <div class="footer-content">
             Калькулятор сложного процента • Учебный проект на Flask
@@ -478,17 +557,17 @@
     </div>
 
     <script>
-        // ===== Форматирование чисел =====
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        function formatWithSpaces(num) {
+            return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
         }
 
-        function parseNumber(str) {
-            if (!str) return '';
-            return str.replace(/\./g, '').replace(',', '.');
+        function formatWithDots(num) {
+            let rounded = Math.round(num * 100) / 100;
+            let parts = rounded.toString().split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            return parts.join(',');
         }
 
-        // ===== Склонение =====
         function getYearLabel(years) {
             const t = parseInt(years);
             if (t % 10 === 1 && t % 100 !== 11) return 'год';
@@ -496,221 +575,160 @@
             return 'лет';
         }
 
+        // Метки для частоты
+        const frequencyLabels = {
+            '1': 'Ежегодно',
+            '12': 'Ежемесячно',
+            '365': 'Ежедневно'
+        };
+
         function getFrequencyLabel(freq) {
-            const labels = {
-                '1': 'Раз в год',
-                '2': 'Раз в полгода',
-                '4': 'Ежеквартально',
-                '12': 'Ежемесячно',
-                '365': 'Ежедневно'
-            };
-            return labels[freq] || freq;
+            return frequencyLabels[String(freq)] || '';
         }
 
-        // ===== Синхронизация ползунков и полей ввода =====
         const principalSlider = document.getElementById('principal');
         const rateSlider = document.getElementById('rate');
         const timeSlider = document.getElementById('time');
         const principalInput = document.getElementById('principalInput');
         const rateInput = document.getElementById('rateInput');
         const timeInput = document.getElementById('timeInput');
-        const frequencySelect = document.getElementById('frequency');
 
-        // Форматирование поля ввода
-        function formatInput(input) {
-            let cursorPos = input.selectionStart;
-            let oldLength = input.value.length;
-            let rawValue = input.value.replace(/[^\d.,]/g, '');
-            
-            // Заменяем запятую на точку
-            rawValue = rawValue.replace(',', '.');
-            
-            // Разделяем на целую и десятичную часть
-            let parts = rawValue.split('.');
-            let integerPart = parts[0].replace(/\D/g, '');
-            let decimalPart = parts.length > 1 ? parts[1].replace(/\D/g, '') : '';
-            
-            if (integerPart === '' && decimalPart === '') {
-                input.value = '';
-                return;
-            }
-            
-            // Форматируем целую часть с точками
-            if (integerPart) {
-                integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-            }
-            
-            let newValue = integerPart;
-            if (decimalPart) {
-                newValue += ',' + decimalPart;
-            }
-            
-            input.value = newValue;
-            
-            // Корректируем позицию курсора
-            let newLength = input.value.length;
-            let diff = newLength - oldLength;
-            let newPos = cursorPos + diff;
-            if (newPos < 0) newPos = 0;
-            if (newPos > newLength) newPos = newLength;
-            input.setSelectionRange(newPos, newPos);
-        }
+        // Кастомный dropdown
+        let selectedFrequency = 12;
+        const freqSelect = document.getElementById('frequencySelect');
+        const freqTrigger = freqSelect.querySelector('.custom-select-trigger');
+        const freqOptions = freqSelect.querySelectorAll('.custom-option');
 
-        // Получение сырого числа из поля
-        function getRawValue(input) {
-            return input.value.replace(/\./g, '').replace(',', '.');
-        }
+        freqTrigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            freqSelect.classList.toggle('open');
+        });
 
-        // Обновление ползунка из поля ввода
-        function updateSliderFromInput(input, slider) {
-            let raw = getRawValue(input);
-            if (raw === '') return;
-            let num = parseFloat(raw);
-            if (!isNaN(num)) {
-                slider.value = num;
+        freqOptions.forEach(function(option) {
+            option.addEventListener('click', function() {
+                selectedFrequency = parseInt(this.dataset.value);
+                freqTrigger.textContent = this.textContent;
+                freqOptions.forEach(function(o) { o.classList.remove('selected'); });
+                this.classList.add('selected');
+                freqSelect.classList.remove('open');
                 calculate();
-            }
-        }
+            });
+        });
 
-        // Обновление поля ввода из ползунка
-        function updateInputFromSlider(slider, input) {
-            let val = parseFloat(slider.value);
-            if (!isNaN(val)) {
-                // Если дробное - показываем как есть, если целое - форматируем
-                if (Number.isInteger(val)) {
-                    input.value = formatNumber(val.toString());
-                } else {
-                    input.value = val.toString().replace('.', ',');
-                }
-            }
-        }
+        document.addEventListener('click', function() {
+            freqSelect.classList.remove('open');
+        });
 
-        // Слушатели ползунков
+        // Синхронизация: ползунок → поле ввода
         principalSlider.addEventListener('input', function() {
-            updateInputFromSlider(principalSlider, principalInput);
+            principalInput.value = formatWithSpaces(this.value);
             calculate();
         });
 
         rateSlider.addEventListener('input', function() {
-            updateInputFromSlider(rateSlider, rateInput);
+            rateInput.value = this.value;
             calculate();
         });
 
         timeSlider.addEventListener('input', function() {
-            updateInputFromSlider(timeSlider, timeInput);
+            timeInput.value = this.value;
+            updateTimeUnit();
             calculate();
         });
 
-        // Слушатели полей ввода
-        principalInput.addEventListener('input', function() {
-            formatInput(principalInput);
-            updateSliderFromInput(principalInput, principalSlider);
+        // Синхронизация: поле ввода → ползунок (с ограничением по лимитам)
+        principalInput.addEventListener('blur', function() {
+            let raw = this.value.replace(/\s/g, '').replace(/\./g, '');
+            let num = parseInt(raw);
+            if (!isNaN(num)) {
+                if (num > 10000000) num = 10000000;
+                if (num < 1000) num = 1000;
+                principalSlider.value = num;
+                this.value = formatWithSpaces(num);
+            } else {
+                this.value = formatWithSpaces(principalSlider.value);
+            }
+            calculate();
         });
 
-        rateInput.addEventListener('input', function() {
-            formatInput(rateInput);
-            updateSliderFromInput(rateInput, rateSlider);
+        rateInput.addEventListener('blur', function() {
+            let num = parseFloat(this.value.replace(',', '.'));
+            if (!isNaN(num)) {
+                if (num > 100) num = 100;
+                if (num < 1) num = 1;
+                rateSlider.value = num;
+                this.value = num;
+            } else {
+                this.value = rateSlider.value;
+            }
+            calculate();
         });
 
-        timeInput.addEventListener('input', function() {
-            formatInput(timeInput);
-            updateSliderFromInput(timeInput, timeSlider);
+        timeInput.addEventListener('blur', function() {
+            let num = parseInt(this.value);
+            if (!isNaN(num)) {
+                if (num > 100) num = 100;
+                if (num < 1) num = 1;
+                timeSlider.value = num;
+                this.value = num;
+                updateTimeUnit();
+            } else {
+                this.value = timeSlider.value;
+                updateTimeUnit();
+            }
+            calculate();
         });
 
-        // Блокировка не-цифровых символов
+        // Enter для подтверждения
+        [principalInput, rateInput, timeInput].forEach(function(input) {
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') this.blur();
+            });
+        });
+
+        function updateTimeUnit() {
+            const t = parseInt(timeSlider.value);
+            document.getElementById('timeUnit').textContent = getYearLabel(t);
+        }
+
+        // Только цифры при вводе
         [principalInput, rateInput, timeInput].forEach(function(input) {
             input.addEventListener('keypress', function(e) {
-                // Разрешаем цифры, точку, запятую, Backspace, Delete, стрелки
-                if (!/[\d.,]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+                if (!/[\d.,]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter'].includes(e.key)) {
                     e.preventDefault();
                 }
             });
-            
-            input.addEventListener('paste', function(e) {
-                e.preventDefault();
-                let paste = (e.clipboardData || window.clipboardData).getData('text');
-                let cleaned = paste.replace(/[^\d.,]/g, '').replace(',', '.');
-                if (cleaned) {
-                    input.value = cleaned;
-                    formatInput(input);
-                    calculate();
-                }
-            });
         });
 
-        // Слушатель частоты
-        frequencySelect.addEventListener('change', calculate);
-
-        // ===== Расчёт =====
-        let calculateTimeout;
-        
+        // Расчёт
         function calculate() {
-            clearTimeout(calculateTimeout);
-            
-            calculateTimeout = setTimeout(function() {
-                const principal = parseFloat(getRawValue(principalInput));
-                const rate = parseFloat(getRawValue(rateInput));
-                const time = parseFloat(getRawValue(timeInput));
-                const frequency = parseInt(frequencySelect.value);
+            const principal = parseFloat(principalSlider.value);
+            const rate = parseFloat(rateSlider.value);
+            const time = parseFloat(timeSlider.value);
+            const frequency = selectedFrequency;
 
-                // Валидация
-                if (isNaN(principal) || isNaN(rate) || isNaN(time) || principal <= 0 || rate < 0 || time <= 0) {
-                    showError('Пожалуйста, введите корректные значения');
-                    return;
-                }
+            const r = rate / 100;
+            const n = frequency;
+            const t = time;
 
-                hideError();
-                
-                const r = rate / 100;
-                const n = frequency;
-                const t = time;
+            const amount = principal * Math.pow((1 + r / n), n * t);
 
-                try {
-                    const amount = principal * Math.pow((1 + r / n), n * t);
-                    
-                    if (!isFinite(amount)) {
-                        showError('Результат слишком большой. Попробуйте уменьшить срок или ставку');
-                        return;
-                    }
+            if (!isFinite(amount)) return;
 
-                    const interest = amount - principal;
+            const interest = amount - principal;
 
-                    // Обновляем UI
-                    document.getElementById('resultFinalAmount').textContent = formatNumberWithCommas(amount.toFixed(2)) + ' ₽';
-                    document.getElementById('resultPrincipal').textContent = formatNumberWithCommas(principal.toFixed(2)) + ' ₽';
-                    document.getElementById('resultRate').textContent = rate + '%';
-                    document.getElementById('resultTime').textContent = time + ' ' + getYearLabel(time);
-                    document.getElementById('resultFrequency').textContent = getFrequencyLabel(frequency);
-                    document.getElementById('resultInterest').textContent = '+ ' + formatNumberWithCommas(interest.toFixed(2)) + ' ₽';
+            document.getElementById('resultFinalAmount').textContent = formatWithDots(amount) + ' ₽';
+            document.getElementById('resultPrincipal').textContent = formatWithDots(principal) + ' ₽';
+            document.getElementById('resultRate').textContent = rate + '%';
+            document.getElementById('resultTime').textContent = time + ' ' + getYearLabel(time);
+            document.getElementById('resultFrequency').textContent = getFrequencyLabel(frequency);
+            document.getElementById('resultInterest').textContent = '+ ' + formatWithDots(interest) + ' ₽';
 
-                    // Показываем результат
-                    document.getElementById('resultPlaceholder').classList.add('hidden');
-                    document.getElementById('resultContainer').classList.remove('hidden');
-
-                } catch (err) {
-                    showError('Ошибка расчёта. Проверьте введённые данные');
-                }
-            }, 100); // debounce 100ms
+            document.getElementById('resultContainer').classList.remove('hidden');
         }
 
-        function formatNumberWithCommas(numStr) {
-            // Форматируем с запятыми для десятичных, точки для тысяч
-            let parts = numStr.split('.');
-            let integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-            let decimalPart = parts.length > 1 ? ',' + parts[1] : '';
-            return integerPart + decimalPart;
-        }
-
-        function showError(message) {
-            const errorContainer = document.getElementById('errorContainer');
-            errorContainer.innerHTML = '<div class="error">' + message + '</div>';
-        }
-
-        function hideError() {
-            document.getElementById('errorContainer').innerHTML = '';
-        }
-
-        // Инициализация при загрузке
+        // Инициализация
+        principalInput.value = formatWithSpaces(100000);
         calculate();
     </script>
 </body>
